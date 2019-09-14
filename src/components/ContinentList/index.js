@@ -1,25 +1,26 @@
-import React, {Component} from 'react';
-import {graphql} from 'react-apollo';
-import {getContinentsQuery} from '../../queries/queries';
+import React, { Component } from 'react';
+import { graphql } from 'react-apollo';
+import { getContinentsQuery } from '../../queries/queries';
 import './index.css';
 import ContryList from '../CountryList/index.js';
 
-class ContinentList extends Component{
-  constructor(props){
+class ContinentList extends Component {
+  constructor(props) {
     super(props);
     this.state = {
       selected: null
     }
   }
 
-  displayContinents(){
+  displayContinents() {
+    console.log(this.props.data)
     var data = this.props.data;
-    if(data.loading){
-      return(<div>Loading continents...</div>);
-    } else{
+    if (data.loading) {
+      return (<div>Loading continents...</div>);
+    } else {
       return data.continents.map(continent => {
-        return(
-          <li key={continent.code} onClick={(e) => {this.setState({selected: continent.code})}}>
+        return (
+          <li key={continent.code} onClick={(e) => { this.setState({ selected: continent.code }) }}>
             {continent.name}
           </li>
         )
@@ -27,8 +28,8 @@ class ContinentList extends Component{
     }
   }
 
-  render(){
-    return(
+  render() {
+    return (
       <div>
         <ul id="continent-list">
           {this.displayContinents()}

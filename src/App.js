@@ -15,7 +15,7 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <div id="main">
-        <ContinentList/>
+        <ContinentList />
       </div>
     </ApolloProvider>
   );
