@@ -3,6 +3,7 @@ import {graphql} from 'react-apollo';
 import {getCountriesQuery} from '../../queries/queries';
 import './index.css';
 import CountryDetails from '../CountryDetails/index.js'
+import PropTypes from 'prop-types';
 
 class CountryList extends Component{
   constructor(props){
@@ -56,6 +57,10 @@ class CountryList extends Component{
       </div>
     );
   }
+}
+
+CountryList.propTypes = {
+  continentId: PropTypes.string
 }
 
 export default graphql(getCountriesQuery,{
