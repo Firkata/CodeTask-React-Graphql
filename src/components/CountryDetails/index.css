@@ -1,0 +1,13 @@
+#country-details-section{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 65%;
+  height: 50%;
+  background: #e5e5e5;
+  padding: 30px;
+  overflow: auto;
+  box-shadow: -2px -3px 5px rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
+  color: #000;
+}
