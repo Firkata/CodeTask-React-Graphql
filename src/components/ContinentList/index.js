@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { graphql } from 'react-apollo';
+import { Query } from 'react-apollo';
 import { getContinentsQuery } from '../../queries/queries';
 import './index.css';
 import ContryList from '../CountryList/index.js';
@@ -13,19 +13,23 @@ class ContinentList extends Component {
   }
 
   displayContinents() {
-    console.log(this.props.data)
-    var data = this.props.data;
-    if (data.loading) {
-      return (<div>Loading continents...</div>);
-    } else {
-      return data.continents.map(continent => {
-        return (
-          <li key={continent.code} onClick={(e) => { this.setState({ selected: continent.code }) }}>
-            {continent.name}
-          </li>
-        )
-      })
-    }
+    console.log(this.props.data);
+    return (
+      <Query query={getContinentsQuery}>
+        {({ loading, error, data }) => {
+          if (loading) return 'Loading continents...';
+          if (error) return `Error! ${error.message}`;
+
+          return data.continents.map(continent => {
+            return (
+              <li key={continent.code} onClick={(e) => { this.setState({ selected: continent.code }) }}>
+                {continent.name}
+              </li>
+            )
+          })
+        }}
+      </Query>
+    );
   }
 
   render() {
@@ -40,4 +44,4 @@ class ContinentList extends Component {
   }
 }
 
-export default graphql(getContinentsQuery)(ContinentList);
+export default ContinentList;

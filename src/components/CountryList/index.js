@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { graphql } from 'react-apollo';
+import { Query } from 'react-apollo';
 import { getCountriesQuery } from '../../queries/queries';
 import './index.css';
 import CountryDetails from '../CountryDetails/index.js'
@@ -15,31 +15,40 @@ class CountryList extends Component {
   }
 
   displayCountries() {
-    const { continent } = this.props.data;
 
-    if (continent) {
-      if (this.state.search == "") {
-        return continent.countries.map(country => {
-          return (
-            <li key={country.code} onClick={(e) => { this.setState({ selected: country.code }) }}>{country.name}</li>
-          )
-        }
-        );
-      } else {
-        return continent.countries
-          .filter(country => country.name.toLowerCase().startsWith(this.state.search.toLowerCase()))
-          .map(country => {
+    return (
+      <Query query={getCountriesQuery} variables={{ code: this.props.continentId }}>
+        {({ loading, error, data }) => {
+          if (loading) return 'Loading countries...';
+          if (error) return `Error! ${error.message}`;
+
+          const { continent } = data;
+
+          if (continent) {
+            if (this.state.search == "") {
+              return continent.countries.map(country => {
+                return (
+                  <li key={country.code} onClick={(e) => { this.setState({ selected: country.code }) }}>{country.name}</li>
+                )
+              });
+            } else {
+              return continent.countries
+                .filter(country => country.name.toLowerCase().startsWith(this.state.search.toLowerCase()))
+                .map(country => {
+                  return (
+                    <li key={country.code} onClick={(e) => { this.setState({ selected: country.code }) }}>{country.name}</li>
+                  )
+                }
+                );
+            }
+          } else {
             return (
-              <li key={country.code} onClick={(e) => { this.setState({ selected: country.code }) }}>{country.name}</li>
+              <div>No continent selected...</div>
             )
           }
-          );
-      }
-    } else {
-      return (
-        <div>No continent selected...</div>
-      )
-    }
+        }}
+      </Query>
+    );
   }
 
   handleSearch(e) {
@@ -65,12 +74,4 @@ CountryList.propTypes = {
   continentId: PropTypes.string
 }
 
-export default graphql(getCountriesQuery, {
-  options: (props) => {
-    return {
-      variables: {
-        code: props.continentId
-      }
-    }
-  }
-})(CountryList);
+export default CountryList;

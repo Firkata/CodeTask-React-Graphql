@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { graphql } from 'react-apollo';
+import { Query } from 'react-apollo';
 import { getCountryQuery } from '../../queries/queries';
 import './index.css';
 import PropTypes from 'prop-types';
@@ -16,24 +16,34 @@ class CountryDetails extends Component {
   }
 
   displayCountryDetails() {
-    const { country } = this.props.data;
-    if (country) {
-      return (
-        <div>
-          <h1>{country.name}</h1>
-          <p>{country.name}, natively written ({country.native}), is a country located in {country.continent.name}.
-          Their national currency is ({country.currency}) and their country code is ({country.phone}).</p>
-          <p>Languages used here are:</p>
-          <ul>
-            {this.getLanguages(country)}
-          </ul>
-        </div>
-      );
-    } else {
-      return (
-        <div>No country selected...</div>
-      );
-    }
+
+    return (
+      <Query query={getCountryQuery} variables={{ code: this.props.countryId }}>
+        {({ loading, error, data }) => {
+          if (loading) return 'Loading country details...';
+          if (error) return `Error! ${error.message}`;
+
+          const { country } = data;
+          if (country) {
+            return (
+              <div>
+                <h1>{country.name}</h1>
+                <p>{country.name}, natively written ({country.native}), is a country located in {country.continent.name}.
+                Their national currency is ({country.currency}) and their country code is ({country.phone}).</p>
+                <p>Languages used here are:</p>
+                <ul>
+                  {this.getLanguages(country)}
+                </ul>
+              </div>
+            );
+          } else {
+            return (
+              <div>No country selected...</div>
+            );
+          }
+        }}
+      </Query>
+    );
   }
 
   render() {
@@ -45,16 +55,4 @@ class CountryDetails extends Component {
   }
 }
 
-CountryDetails.propTypes = {
-  countryId: PropTypes.string
-}
-
-export default graphql(getCountryQuery, {
-  options: (props) => {
-    return {
-      variables: {
-        code: props.countryId
-      }
-    }
-  }
-})(CountryDetails);
+export default CountryDetails;
