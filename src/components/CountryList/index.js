@@ -71,7 +71,7 @@ class CountryList extends Component {
 }
 
 CountryList.propTypes = {
-  continentId: PropTypes.string
+  continentId: PropTypes.string.isRequired
 }
 
 export default CountryList;

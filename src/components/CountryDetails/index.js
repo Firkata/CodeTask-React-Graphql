@@ -55,4 +55,8 @@ class CountryDetails extends Component {
   }
 }
 
+CountryDetails.propTypes = {
+  countryId: PropTypes.string.isRequired
+}
+
 export default CountryDetails;
